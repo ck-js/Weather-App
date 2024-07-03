@@ -43,25 +43,36 @@ createCardItem(response)
 
 function createCardItem(object) {
 const hourly = object.forecast.forecastday[0].hour;
+const currentTime = object.location.localtime;
+
     for (let i = 0; i < hourly.length; i++) {
         const hourlyTime = hourly[i].time;
         const date = new Date(hourlyTime)
         const formattedHourlyTime = (date.getHours() < 10 ? '0' : + '') + date.getHours();
-        
+        const hourlyCondition = hourly[i].condition;
         const hourlyTemp = hourly[i].temp_c;
     
+
+        if (hourlyTime > currentTime) {
         const hourlyDiv = document.createElement('div');
+        hourlyDiv.classList.add('hourly-card');
+
     const p = document.createElement('h6');
     p.textContent = formattedHourlyTime;
     
+const conditionIcon = document.createElement('img');
+conditionIcon.src = hourlyCondition.icon;
+conditionIcon.alt = hourlyCondition.text;
+
     const p2 = document.createElement('p');
     p2.textContent = hourlyTemp + '°'
     
     hourlyDiv.appendChild(p)
+hourlyDiv.appendChild(conditionIcon)
     hourlyDiv.appendChild(p2)
     
     section2Container.appendChild(hourlyDiv);
-
+        }
 
     }
 }
