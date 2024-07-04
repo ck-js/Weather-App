@@ -56,3 +56,19 @@ input[type="text"], button {
     border: none;
 
 }
+.daily-forecast-cards {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;
+}
+.daily-condition-wrappers {
+ display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: none;
+}
