@@ -27,7 +27,7 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
     highLow.innerHTML = `H : ${response.forecast.forecastday[0].day.maxtemp_c}°  L : ${response.forecast.forecastday[0].day.mintemp_c}°`;
 
 // section 2
-createCardItem(response)
+createSection2Cards(response)
 
 
 
@@ -41,15 +41,17 @@ createCardItem(response)
 }
 
 
-function createCardItem(object) {
+function createSection2Cards(object) {
 const hourly = object.forecast.forecastday[0].hour;
 const currentTime = object.location.localtime;
 
     for (let i = 0; i < hourly.length; i++) {
         const hourlyTime = hourly[i].time;
+        
         const date = new Date(hourlyTime)
         const formattedHourlyTime = (date.getHours() < 10 ? '0' : + '') + date.getHours();
         const hourlyCondition = hourly[i].condition;
+        const chanceOfRain = hourly[i].chance_of_rain;
         const hourlyTemp = hourly[i].temp_c;
     
 
@@ -59,17 +61,21 @@ const currentTime = object.location.localtime;
 
     const p = document.createElement('h6');
     p.textContent = formattedHourlyTime;
-    
+    hourlyDiv.appendChild(p)    
+
 const conditionIcon = document.createElement('img');
 conditionIcon.src = hourlyCondition.icon;
 conditionIcon.alt = hourlyCondition.text;
+hourlyDiv.appendChild(conditionIcon)
 
+if (chanceOfRain > 0) {
+const p3 = document.createElement('p')
+p3.textContent = chanceOfRain + '%'
+hourlyDiv.appendChild(p3)
+}
     const p2 = document.createElement('p');
     p2.textContent = hourlyTemp + '°'
-    
-    hourlyDiv.appendChild(p)
-hourlyDiv.appendChild(conditionIcon)
-    hourlyDiv.appendChild(p2)
+        hourlyDiv.appendChild(p2)
     
     section2Container.appendChild(hourlyDiv);
         }
