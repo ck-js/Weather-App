@@ -109,8 +109,41 @@ dailyChanceOfRain.textContent = dailyForecastObject.day.daily_chance_of_rain + '
 
 dailyConditionWrapper.appendChild(dailyConditionImage);
 dailyConditionWrapper.appendChild(dailyChanceOfRain);
-
 cardElement.appendChild(dailyConditionWrapper);
+
+const lowHighWrapper = document.createElement('div');
+lowHighWrapper.classList.add('low-high-wrappers');
+
+lowDaily = document.createElement('p');
+lowDaily.textContent = dailyForecastObject.day.mintemp_c + '°';
+const dailyTempColor = document.createElement('hr');
+
+if (dailyForecastObject.day.avgtemp_c >= 35) {
+  dailyTempColor.style.borderColor = 'red';  
+} 
+else if(dailyForecastObject.day.avgtemp_c >= 30) {
+    dailyTempColor.style.borderColor = 'orange';  
+  } 
+  else if(dailyForecastObject.day.avgtemp_c >= 25) {
+    dailyTempColor.style.borderColor = 'yellow';  
+  } 
+  else if(dailyForecastObject.day.avgtemp_c >= 20) {
+    dailyTempColor.style.borderColor = 'blue';  
+  }   
+  else if(dailyForecastObject.day.avgtemp_c >= 10) {
+    dailyTempColor.style.borderColor = 'lightBlue';  
+  }   
+  else if(dailyForecastObject.day.avgtemp_c >= 10) {
+    dailyTempColor.style.borderColor = 'gray';  
+  }   
+  
+const highDaily = document.createElement('p');
+highDaily.textContent = dailyForecastObject.day.maxtemp_c + '°';
+
+lowHighWrapper.appendChild(lowDaily);
+lowHighWrapper.appendChild(dailyTempColor);
+lowHighWrapper.appendChild(highDaily);
+cardElement.appendChild(lowHighWrapper);
 
 section3Container.appendChild(cardElement);
 }
