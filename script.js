@@ -6,6 +6,7 @@ const highLow = document.querySelector('#high-low');
 
 const section2Container = document.querySelector('#section-2-container');
 const section3Container = document.querySelector('#section-3-container');
+const section4Container = document.querySelector('#section-4-container');
 
 
 function fetchNewLocation(location) {
@@ -30,6 +31,7 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
 // section 2
 createSection2Cards(response)
 createSection3Cards(response)
+createSection4Cards(response)
 
 
   })
@@ -60,8 +62,6 @@ const currentTime =new Date(object.location.localtime);
         const chanceOfRain = hourly[i].chance_of_rain;
         const hourlyTemp = hourly[i].temp_c;
     
-console.log(typeof hourlyTime);
-console.log(typeof currentTime);
 
         if (date > currentTime) {
         const hourlyDiv = document.createElement('div');
@@ -157,6 +157,58 @@ cardElement.appendChild(lowHighWrapper);
 
 section3Container.appendChild(cardElement);
 }
+}
+function createSection4Cards(object) {
+    removeChildItems(section4Container)
+
+const currentObject = object.current;
+
+const feelsLike = currentObject.feelslike_c;
+const feelsLikeDiv = document.createElement('div');
+feelsLikeDiv.classList.add('section-4-cards');
+
+const feelsLikeHeader = document.createElement('h6');
+feelsLikeHeader.textContent = 'FEELS LIKE';
+const feelsLikeValue = document.createElement('p');
+feelsLikeValue.classList.add('section-4-values');
+feelsLikeValue.textContent = feelsLike + '°';
+
+const feelsLikeDescription = document.createElement('p');
+if (currentObject.humidity > 60) {
+feelsLikeDescription.textContent = 'Humidity is making it feel hotter';
+} else {
+feelsLikeDescription.textContent = '';
+}
+feelsLikeDiv.appendChild(feelsLikeHeader);
+feelsLikeDiv.appendChild(feelsLikeValue);
+feelsLikeDiv.appendChild(feelsLikeDescription);
+
+
+const precepitation = currentObject.precip_mm;
+
+const precipitationDiv = document.createElement('div');
+precipitationDiv.classList.add('section-4-cards');
+
+const precipitationHeader = document.createElement('h6');
+precipitationHeader.textContent = 'PRECIPITATION';
+
+const precipitationValue = document.createElement('p');
+precipitationValue.classList.add('section-4-values');
+precipitationValue.textContent = `${precepitation} mm`;
+const precipitationValue2 = document.createElement('span');
+precipitationValue2.textContent = ' in the last 24h';
+precipitationValue.appendChild(precipitationValue2);
+
+const precipitationDescription = document.createElement('p');
+
+
+precipitationDiv.appendChild(precipitationHeader);
+precipitationDiv.appendChild(precipitationValue);
+precipitationDiv.appendChild(precipitationDescription);
+
+section4Container.appendChild(feelsLikeDiv);
+section4Container.appendChild(precipitationDiv);
+
 
 }
 const searchInput = document.getElementById('search-input');
