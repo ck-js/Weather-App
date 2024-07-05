@@ -39,11 +39,17 @@ createSection3Cards(response)
     tempC.innerHTML = '°';
   });
 }
-
+function removeChildItems(container) {
+while (container.firstChild) {
+    container.removeChild(container.firstChild);
+}
+}
 
 function createSection2Cards(object) {
+removeChildItems(section2Container);
+
 const hourly = object.forecast.forecastday[0].hour;
-const currentTime = object.location.localtime;
+const currentTime =new Date(object.location.localtime);
 
     for (let i = 0; i < hourly.length; i++) {
         const hourlyTime = hourly[i].time;
@@ -54,8 +60,10 @@ const currentTime = object.location.localtime;
         const chanceOfRain = hourly[i].chance_of_rain;
         const hourlyTemp = hourly[i].temp_c;
     
+console.log(typeof hourlyTime);
+console.log(typeof currentTime);
 
-        if (hourlyTime > currentTime) {
+        if (date > currentTime) {
         const hourlyDiv = document.createElement('div');
         hourlyDiv.classList.add('hourly-card');
 
@@ -83,6 +91,8 @@ hourlyDiv.appendChild(p3)
     }
 }
 function createSection3Cards(object) {
+removeChildItems(section3Container);
+
 const dailyForecast = object.forecast.forecastday;
 for (let i = 0; i < dailyForecast.length; i++) {
     const dailyForecastObject = dailyForecast[i];
