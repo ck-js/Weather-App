@@ -13,33 +13,39 @@ function fetchNewLocation(location) {
 // alert(location)
 
 fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d001651241706&q=${location}&days=3`, {
-  mode: 'cors'
+    mode: 'cors'
  })
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(response) {
-    console.log(response);
-    // section 1
-    name.innerHTML = response.location.name;
-    tempC.innerHTML = response.current.temp_c + '°C';
-    overview.innerHTML = response.current.condition.text;
-    overviewImage.src = response.current.condition.icon;
-    overviewImage.alt = response.current.condition.text;
-    highLow.innerHTML = `H : ${response.forecast.forecastday[0].day.maxtemp_c}°  L : ${response.forecast.forecastday[0].day.mintemp_c}°`;
+    .then(function(response) {
+        return new Promise(function(resolve) {
+            setTimeout(function() {
+                resolve(response.json());
+            }, 5000); // 5 seconds delay
+        });
+    })
+    .then(function(response) {
+        console.log(response);
+        // section 1
+        name.innerHTML = response.location.name;
+        tempC.innerHTML = response.current.temp_c + '°C';
+        overview.innerHTML = response.current.condition.text;
+        overviewImage.src = response.current.condition.icon;
+        overviewImage.alt = response.current.condition.text;
+        highLow.innerHTML = `H : ${response.forecast.forecastday[0].day.maxtemp_c}°  L : ${response.forecast.forecastday[0].day.mintemp_c}°`;
 
-// section 2
-createSection2Cards(response)
-createSection3Cards(response)
-createSection4Cards(response)
-
-
-  })
-  .catch(function(error) {
-    console.log(error);
-    name.innerHTML = 'Location not found';
-    tempC.innerHTML = '°';
-  });
+        // section 2
+        createSection2Cards(response);
+        createSection3Cards(response);
+        createSection4Cards(response);
+    })
+    .catch(function(error) {
+        console.log(error);
+        name.innerHTML = 'Location not found';
+        tempC.innerHTML = '°';
+    })
+    .finally(() => {
+        const loadingSpinner = document.getElementById('loading-spinner');
+        loadingSpinner.style.display = 'none';
+    });
 }
 function removeChildItems(container) {
 while (container.firstChild) {
@@ -177,8 +183,6 @@ if (currentObject.vis_km >= 10) {
 }
 
 }
-
-
 function createSection4Card(title, value, description) {
     const cardDiv = document.createElement('div');
     cardDiv.classList.add('section-4-cards');
@@ -200,15 +204,23 @@ function createSection4Card(title, value, description) {
     section4Container.appendChild(cardDiv);
 }
 
+function createLoadingSpinner() {
+const loadingSpinner = document.createElement('div');
+loadingSpinner.id = 'loading-spinner';
+loadingSpinner.style.display = 'none'; // Initially hidden
+loadingSpinner.innerHTML = `<div class="spinner"></div>`;
 
-
-
-
+// Append the loading spinner to the body or a specific container
+document.body.insertBefore(loadingSpinner, document.body.firstChild);
+}
+createLoadingSpinner();
 
 const searchInput = document.getElementById('search-input');
 const button = document.querySelector('button')
 button.addEventListener('click', event => {
 event.preventDefault();
+const loadingSpinner = document.getElementById('loading-spinner');
+loadingSpinner.style.display = 'block';
 fetchNewLocation(searchInput.value);
 searchInput.value = '';
 });
