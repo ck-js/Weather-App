@@ -162,55 +162,42 @@ function createSection4Cards(object) {
     removeChildItems(section4Container)
 
 const currentObject = object.current;
-
-const feelsLike = currentObject.feelslike_c;
-const feelsLikeDiv = document.createElement('div');
-feelsLikeDiv.classList.add('section-4-cards');
-
-const feelsLikeHeader = document.createElement('h6');
-feelsLikeHeader.textContent = 'FEELS LIKE';
-const feelsLikeValue = document.createElement('p');
-feelsLikeValue.classList.add('section-4-values');
-feelsLikeValue.textContent = feelsLike + '°';
-
-const feelsLikeDescription = document.createElement('p');
-if (currentObject.humidity > 60) {
-feelsLikeDescription.textContent = 'Humidity is making it feel hotter';
-} else {
-feelsLikeDescription.textContent = '';
-}
-feelsLikeDiv.appendChild(feelsLikeHeader);
-feelsLikeDiv.appendChild(feelsLikeValue);
-feelsLikeDiv.appendChild(feelsLikeDescription);
-
-
+const forecastObject = object.forecast.forecastday;
 const precepitation = currentObject.precip_mm;
 
-const precipitationDiv = document.createElement('div');
-precipitationDiv.classList.add('section-4-cards');
-
-const precipitationHeader = document.createElement('h6');
-precipitationHeader.textContent = 'PRECIPITATION';
-
-const precipitationValue = document.createElement('p');
-precipitationValue.classList.add('section-4-values');
-precipitationValue.textContent = `${precepitation} mm`;
-const precipitationValue2 = document.createElement('span');
-precipitationValue2.textContent = ' in the last 24h';
-precipitationValue.appendChild(precipitationValue2);
-
-const precipitationDescription = document.createElement('p');
-
-
-precipitationDiv.appendChild(precipitationHeader);
-precipitationDiv.appendChild(precipitationValue);
-precipitationDiv.appendChild(precipitationDescription);
-
-section4Container.appendChild(feelsLikeDiv);
-section4Container.appendChild(precipitationDiv);
-
+createSection4Card('FEELS LIKE', currentObject.feelslike_c + '°', currentObject.humidity > 60 ? 'Humidity is making it feel hotter' : '');
+createSection4Card('PRECIPITATION', `${precepitation} mm <span>in the last 24h</span>`, `${forecastObject[0].day.totalprecip_mm + forecastObject[1].day.totalprecip_mm} expected in next 24h`);
+createSection4Card('HUMIDITY', currentObject.humidity + '%', `The dew point is ${currentObject.dewpoint_c}° right now`);
 
 }
+
+
+function createSection4Card(title, value, description) {
+    const cardDiv = document.createElement('div');
+    cardDiv.classList.add('section-4-cards');
+
+    const header = document.createElement('h6');
+    header.textContent = title;
+
+    const valueElement = document.createElement('p');
+    valueElement.classList.add('section-4-values');
+    valueElement.innerHTML = value;
+
+    const descriptionElement = document.createElement('p');
+    descriptionElement.textContent = description;
+
+    cardDiv.appendChild(header);
+    cardDiv.appendChild(valueElement);
+    cardDiv.appendChild(descriptionElement);
+
+    section4Container.appendChild(cardDiv);
+}
+
+
+
+
+
+
 const searchInput = document.getElementById('search-input');
 const button = document.querySelector('button')
 button.addEventListener('click', event => {
