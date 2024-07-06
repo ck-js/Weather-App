@@ -168,6 +168,13 @@ const precepitation = currentObject.precip_mm;
 createSection4Card('FEELS LIKE', currentObject.feelslike_c + '°', currentObject.humidity > 60 ? 'Humidity is making it feel hotter' : '');
 createSection4Card('PRECIPITATION', `${precepitation} mm <span>in the last 24h</span>`, `${forecastObject[0].day.totalprecip_mm + forecastObject[1].day.totalprecip_mm} expected in next 24h`);
 createSection4Card('HUMIDITY', currentObject.humidity + '%', `The dew point is ${currentObject.dewpoint_c}° right now`);
+if (currentObject.vis_km >= 10) {
+    createSection4Card('VISIBILITY', currentObject.vis_km + 'km', 'Perfectly clear view');
+} else if (currentObject.vis_km >= 5) {
+    createSection4Card('VISIBILITY', currentObject.vis_km + 'km', 'Good visibility');
+} else {
+    createSection4Card('VISIBILITY', currentObject.vis_km + 'km', 'Limited visibility');
+}
 
 }
 
