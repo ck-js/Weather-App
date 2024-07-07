@@ -1,3 +1,4 @@
+const weatherContainer = document.querySelector('#weather-container');
 const name = document.querySelector('#name');
 const tempC = document.querySelector('#temp-c');
 const overview = document.querySelector('#overview');
@@ -11,6 +12,7 @@ const section4Container = document.querySelector('#section-4-container');
 
 function fetchNewLocation(location) {
 // alert(location)
+showLoadingSpinner();
 
 fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d001651241706&q=${location}&days=3`, {
     mode: 'cors'
@@ -19,11 +21,16 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
         return new Promise(function(resolve) {
             setTimeout(function() {
                 resolve(response.json());
-            }, 5000); // 5 seconds delay
+            }, 1000); // 5 seconds delay
         });
     })
     .then(function(response) {
         console.log(response);
+        showSection(weatherContainer);
+        showSection(section2Container, 'flex');
+        showSection(section3Container, 'flex');
+        showSection(section4Container, 'grid');
+        
         // section 1
         name.innerHTML = response.location.name;
         tempC.innerHTML = response.current.temp_c + '°C';
@@ -41,10 +48,17 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
         console.log(error);
         name.innerHTML = 'Location not found';
         tempC.innerHTML = '°';
+        overview.innerHTML = '';
+        overviewImage.src = '';
+        overviewImage.alt = '';
+        highLow.innerHTML = '';
+        hideSection(section2Container)
+        hideSection(section3Container);
+        hideSection(section4Container);
     })
     .finally(() => {
-        const loadingSpinner = document.getElementById('loading-spinner');
-        loadingSpinner.style.display = 'none';
+        hideLoadingSpinner();
+        
     });
 }
 function removeChildItems(container) {
@@ -55,6 +69,7 @@ while (container.firstChild) {
 
 function createSection2Cards(object) {
 removeChildItems(section2Container);
+
 
 const hourly = object.forecast.forecastday[0].hour;
 const currentTime =new Date(object.location.localtime);
@@ -233,6 +248,24 @@ if (event.key === 'Enter') {
 }
 });
 
+function showLoadingSpinner() {
+const loadingSpinner = document.getElementById('loading-spinner');
+loadingSpinner.style.display = 'block';
+
+hideSection(weatherContainer)
+}
+
+function hideLoadingSpinner() { 
+    const loadingSpinner = document.getElementById('loading-spinner');
+    loadingSpinner.style.display = 'none';
+
+}
+function hideSection(section) {
+    section.style.display = 'none';
+}   
+function showSection(section, displayType) {
+    section.style.display = displayType || 'block';
+}
 
 
 fetchNewLocation('bangkok')
