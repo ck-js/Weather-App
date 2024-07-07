@@ -30,7 +30,7 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
         showSection(section2Container, 'flex');
         showSection(section3Container, 'flex');
         showSection(section4Container, 'grid');
-        
+
         // section 1
         name.innerHTML = response.location.name;
         tempC.innerHTML = response.current.temp_c + '°C';
@@ -38,7 +38,7 @@ fetch(`https://api.weatherapi.com/v1/forecast.json?key=06b893ef0f8344fc8d0016512
         overviewImage.src = response.current.condition.icon;
         overviewImage.alt = response.current.condition.text;
         highLow.innerHTML = `H : ${response.forecast.forecastday[0].day.maxtemp_c}°  L : ${response.forecast.forecastday[0].day.mintemp_c}°`;
-
+        
         // section 2
         createSection2Cards(response);
         createSection3Cards(response);
@@ -266,6 +266,11 @@ function hideSection(section) {
 function showSection(section, displayType) {
     section.style.display = displayType || 'block';
 }
-
+function changeBackground(response) {
+    const body = document.querySelector('body');
+    body.classList.add('day-time')
+    
+}
+// changeBackground()
 
 fetchNewLocation('bangkok')
